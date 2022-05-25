@@ -5,7 +5,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { OrderModule } from './order/order.module';
 import configuration from './config/configuration';
+import { Order } from './order/entities/order.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import configuration from './config/configuration';
           username: configService.get<string>('user'),
           password: configService.get<string>('password'),
           database: configService.get<string>('dbName'),
-          entities: [],
+          entities: [Order],
           synchronize: true,
         };
       },
@@ -34,6 +36,7 @@ import configuration from './config/configuration';
       playground: true,
       autoSchemaFile: true,
     }),
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
