@@ -41,4 +41,8 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
-          command: "cd ~/app && npm install && npm run build"
+          passphrase: ""
+          command: |
+            cd ~/app
+            npm install
+            npm run build
