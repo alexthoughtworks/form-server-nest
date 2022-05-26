@@ -34,15 +34,20 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: "~/app"
           EXCLUDE: "/dist/, /node_modules/"
-
-      - name: run
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          privateKey: ${{ secrets.SERVER_SSH_KEY }}
-          passphrase: ""
-          command: |
+          
+      - name: Deploy in EC2
+        env:
+            PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY  }}
+            HOSTNAME : ${{ secrets.REMOTE_HOST  }}
+            USER_NAME : ${{ secrets.REMOTE_USER  }}
+            
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          
             cd ~/app
             npm install
             npm run build
+          '
+
+
