@@ -45,5 +45,6 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
             cd ~/app &&
-            source ./deploy.sh
+            /home/ubuntu/.nvm/versions/node/v16.14.2/bin/npm install &&
+            /home/ubuntu/.nvm/versions/node/v16.14.2/bin/npm run build
           '

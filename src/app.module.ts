@@ -8,6 +8,9 @@ import { AppService } from './app.service';
 import { OrderModule } from './order/order.module';
 import configuration from './config/configuration';
 import { Order } from './order/entities/order.entity';
+import { ProductModule } from './product/product.module';
+import { OrderDetail } from './order/entities/order-detail.entity';
+import { Product } from './product/entities/product.entity';
 
 @Module({
   imports: [
@@ -24,7 +27,7 @@ import { Order } from './order/entities/order.entity';
           username: configService.get<string>('user'),
           password: configService.get<string>('password'),
           database: configService.get<string>('dbName'),
-          entities: [Order],
+          entities: [Order, OrderDetail, Product],
           synchronize: true,
         };
       },
@@ -37,6 +40,7 @@ import { Order } from './order/entities/order.entity';
       autoSchemaFile: true,
     }),
     OrderModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

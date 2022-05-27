@@ -1,12 +1,10 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
+import { CreateDetail } from './create-order-detail.input';
 
 @InputType()
 export class CreateOrderInput {
-  @Field(() => Int)
-  quantity: number;
-
-  @Field()
-  product: string;
+  @Field(() => [CreateDetail])
+  products: CreateDetail[];
 
   @Field(() => Int)
   createdOn: number;
