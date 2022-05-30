@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -46,5 +44,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
             cd ~/app &&
             /home/ubuntu/.nvm/versions/node/v16.14.2/bin/npm install &&
-            /home/ubuntu/.nvm/versions/node/v16.14.2/bin/npm run build
+            /home/ubuntu/.nvm/versions/node/v16.14.2/bin/npm run build &&
+            /home/ubuntu/.nvm/versions/node/v16.14.2/bin/pm2 restart main
           '
