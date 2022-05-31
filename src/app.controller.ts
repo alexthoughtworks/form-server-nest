@@ -16,7 +16,7 @@ export class AppController {
 
   @Post('test-kafka')
   testKafka(): string {
-    this.eventService.emitNewOrder();
+    this.eventService.emitTestMessage();
     return 'done';
   }
 }
