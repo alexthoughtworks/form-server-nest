@@ -21,6 +21,10 @@ import { EventModule } from './event/event.module';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {
+        console.log(
+          configService.get('kafkaBrokers'),
+          typeof configService.get('kafkaBrokers'),
+        );
         return {
           type: 'postgres',
           host: configService.get<string>('host'),
