@@ -11,6 +11,7 @@ import { Order } from './order/entities/order.entity';
 import { ProductModule } from './product/product.module';
 import { OrderDetail } from './order/entities/order-detail.entity';
 import { Product } from './product/entities/product.entity';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -20,6 +21,10 @@ import { Product } from './product/entities/product.entity';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {
+        console.log(
+          configService.get('kafkaBrokers'),
+          typeof configService.get('kafkaBrokers'),
+        );
         return {
           type: 'postgres',
           host: configService.get<string>('host'),
@@ -41,6 +46,7 @@ import { Product } from './product/entities/product.entity';
     }),
     OrderModule,
     ProductModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],

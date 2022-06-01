@@ -9,8 +9,12 @@ export class OrderResolver {
   constructor(private readonly orderService: OrderService) {}
 
   @Mutation(() => Order)
-  createOrder(@Args('createOrderInput') createOrderInput: CreateOrderInput) {
-    return this.orderService.create(createOrderInput);
+  async createOrder(
+    @Args('createOrderInput') createOrderInput: CreateOrderInput,
+  ) {
+    const order = await this.orderService.create(createOrderInput);
+    await this.orderService.sendSummaryEvents(order);
+    return order;
   }
 
   @Query(() => [Order], { name: 'orders' })

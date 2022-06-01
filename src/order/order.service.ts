@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { toOrderSummary, toProductSummary } from '../event/event-utils';
+import { EventService } from '../event/event.service';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
 import { OrderDetail } from './entities/order-detail.entity';
@@ -12,6 +14,7 @@ export class OrderService {
     @InjectRepository(Order) private orderRepository: Repository<Order>,
     @InjectRepository(OrderDetail)
     private orderDetailRepository: Repository<OrderDetail>,
+    private readonly eventService: EventService,
   ) {}
 
   async create(createOrderInput: CreateOrderInput) {
@@ -37,7 +40,6 @@ export class OrderService {
     const orders = await this.orderRepository.find({
       relations: ['detail', 'detail.product'],
     });
-    console.log(JSON.stringify(orders));
     return orders;
   }
 
@@ -63,5 +65,14 @@ export class OrderService {
     }
     await this.orderRepository.remove(order);
     return order;
+  }
+
+  async sendSummaryEvents(order: Order) {
+    const orderSummary = toOrderSummary(order);
+    this.eventService.emitOrderSummary(orderSummary);
+    for (const product of order.detail) {
+      const productSummary = toProductSummary(product);
+      this.eventService.emitProductSummary(productSummary);
+    }
   }
 }
